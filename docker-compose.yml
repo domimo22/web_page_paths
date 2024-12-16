@@ -1,0 +1,26 @@
+services: 
+  redis:
+    image: redis:latest
+    container_name: redis_midterm
+    ports:
+      - "9876:6379"  
+    volumes:
+      - ./redis2/redis_data:/data  
+    command: ["redis-server", "--appendonly", "yes"]
+  neo4j:
+    container_name: neo4j_midterm
+    image: neo4j:latest
+    ports:
+      - 7474:7474
+      - 7687:7687
+    environment:
+      - NEO4J_AUTH=neo4j/${NEO4J_PASSWORD}
+      - NEO4J_apoc_export_file_enabled=true
+      - NEO4J_apoc_import_file_enabled=true
+      - NEO4J_apoc_import_file_use__neo4j__config=true
+      - NEO4J_PLUGINS=["apoc", "graph-data-science"]
+    volumes:
+      - ./neo4j_db2/data:/data
+      - ./neo4j_db2/logs:/logs
+      - ./neo4j_db2/import:/var/lib/neo4j/import
+      - ./neo4j_db2/plugins:/plugins
